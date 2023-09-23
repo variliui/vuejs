@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script>
+      let data = { name: "varil" };
+      let obj = new Proxy(data, {
+        get(target, key) {
+          console.log("触发get");
+          return target[key];
+          // 代理obj.xx取值的函数
+        },
+        set(target, key, value) {
+          console.log("触发set");
+          target[key] = value;
+          render();
+          // obj.xx = yy 修改的时候触发set函数
+        },
+      });
+      function render() {
+        document.querySelector("#app").innerHTML = "你好，" + obj.name;
+      }
+      render();
+      setTimeout(() => {
+        obj.name = "iui";
+      }, 2000);
+      // let obj = reactive({
+      //   name: "varil",
+      // });
+      // effect(() => {
+      //   document.querySelector("#app").innerHTML = "你好，" + obj.name;
+      // });
+
+      //   let obj = {
+      //     name: "varil",
+      //   };
+      //   function render() {
+      //     document.querySelector("#app").innerHTML = "你好，" + obj.name;
+      //   }
+      //   render();
+      //   setTimeout(() => {
+      //     obj.name = "iui";
+      //     render(); // 500 ms 后执行 render 函数
+      //   }, 500);
+    </script>
+  </body>
+</html>
